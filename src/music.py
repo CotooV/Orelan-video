@@ -352,10 +352,11 @@ def compose():
     for m, d, v, p in [(86, 0.0, 0.30, -0.4), (93, 0.09, 0.22, 0.4), (90, 0.19, 0.20, -0.1),
                        (100, 0.31, 0.12, 0.2), (98, 0.47, 0.10, -0.25)]:
         mus.add(glass_bell(m, 4.0, v, index=2.8), t5 + d, pan=p)
-    mus.add(felt_piano(78, 2.6, 0.55), H["firma"], pan=0.1)
-    mus.add(glass_bell(86, 2.6, 0.14), H["firma"], pan=-0.2)
-    mus.add(glass_bell(93, 2.0, 0.10), H["brillo_logo"], pan=0.35)
-    mus.add(glass_bell(98, 1.8, 0.06), H["brillo_logo"] + 0.11, pan=-0.35)
+    mus.add(felt_piano(78, 2.6, 0.90, bright=1.3), H["firma"], pan=0.1)     # firma: fa# (3ª mayor)
+    mus.add(felt_piano(66, 2.6, 0.50), H["firma"], pan=-0.15)
+    mus.add(glass_bell(90, 2.6, 0.26), H["firma"], pan=-0.25)
+    mus.add(glass_bell(93, 2.0, 0.30, index=3.2), H["brillo_logo"], pan=0.35)   # destello
+    mus.add(glass_bell(98, 1.8, 0.16), H["brillo_logo"] + 0.11, pan=-0.35)
     return mus, fx, dry, swell
 
 

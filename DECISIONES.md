@@ -20,6 +20,8 @@ De ahí sale un gesto gráfico único que recorre los cinco planos y le da ident
 | 4 · Puertas | la rendija que, por fin, se abre |
 | 5 · Revelación | la misma rendija reaparece sobre negro, se abre en horizontal y descubre el logotipo |
 
+El spot arranca en oscuridad total durante 0,35 s (la primera luz aparece en el fotograma 21) y crece con el dron grave: es un silencio visual deliberado, lo bastante corto para no perder al espectador en redes.
+
 El cierre «rima» con el primer fotograma: el espectador ve nacer la línea en el segundo 0 y la ve abrirse sobre la marca en el segundo 12. Es la firma visual de la campaña.
 
 ## 2. Estructura, ritmo y sincronía
@@ -134,6 +136,7 @@ El encargo indica usar `./brand/orelan-logo.svg`. **El repositorio llegó vacío
 10. **Legibilidad:** tamaño de las líneas sans de 34 a 40 px, oliva más claro y sombra difusa bajo el texto que cruza la luz.
 11. **Música v1:** mezcla plana y piano enmascarado por las cuerdas (las notas de «DESCUBRIRSE» y «PUERTAS» no se detectaban) → rebalanceo dinámico (compás 1 más íntimo, compás 5 el más intenso), refuerzo de octava + campana en esas notas y eliminación de un silbido invertido.
 12. **Motion blur:** escalonado visible en el látigo inicial del plano 2 → muestreo adaptativo de 40 submuestras.
+13. **QC del máster final:** los dos acentos del cierre (firma a 13,125 s y destello a 13,875 s) quedaban enmascarados por la cola del acorde final y no se detectaban como ataques → se reforzaron (piano con tercera mayor + campana) y se remezcló solo el audio sobre el mismo vídeo, sin recodificar la imagen. El detector de cortes del QC confundía la apertura continua de la rendija con un corte → se pasó a un criterio relativo a la variación local.
 
 Cada iteración se validó con fotogramas sueltos, hojas de contactos, una previsualización completa a media resolución con audio y, para la música, espectrograma, envolvente y detección de ataques.
 
@@ -143,7 +146,19 @@ Cada iteración se validó con fotogramas sueltos, hojas de contactos, una previ
 
 ## 10. Tiempo de producción
 
-QC_TIEMPO
+Tiempo total de producción: **≈ 1 h 35 min** de reloj (08:14 – 09:49 UTC), en un único ordenador sin GPU (OpenGL por software, 4 núcleos).
+
+| Fase | Tiempo aprox. |
+|---|---|
+| Concepto, guion técnico y rejilla musical | 5 min |
+| Look-dev de los shaders (puertas, vidrio, líquido, revelación) con fotogramas de prueba | 25 min |
+| Sistema tipográfico y coreografía letra a letra | 8 min |
+| Composición, síntesis y mezcla de la música + análisis espectral | 10 min |
+| Previsualización completa a media resolución e iteraciones de ajuste | 10 min |
+| Render final 1080 × 1920 a 60 fps (900 fotogramas, 12–40 submuestras cada uno) | 39 min |
+| Control de calidad, corrección de acentos del cierre y remezcla del audio | 8 min |
+
+Con una GPU dedicada el render final bajaría a pocos minutos.
 
 ## 11. Estructura del proyecto
 

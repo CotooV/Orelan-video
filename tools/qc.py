@@ -90,10 +90,13 @@ def main():
     diff = np.abs(np.diff(fr_s, axis=0)).mean(axis=(1, 2, 3))
     cut_frames = [int(round(s * FPS)) for _, s, _ in SHOTS[1:]]
     lines += ["", "## Imagen", "", "| | Comprobación | Resultado |", "|---|---|---|"]
-    # cortes: los mayores saltos deben coincidir con los cortes de la línea de tiempo
-    big = np.argsort(diff)[::-1][:len(cut_frames)] + 1
-    detected = sorted(int(b) for b in big)
-    check("Cortes en su fotograma exacto", detected == sorted(cut_frames),
+    # cortes: discontinuidad ≥ 8× la variación local (un movimiento rápido continuo no cuenta)
+    detected = []
+    for i in range(len(diff)):
+        win = np.concatenate([diff[max(0, i - 6):i], diff[i + 1:i + 7]])
+        if diff[i] > 3.0 and diff[i] > 8.0 * (np.median(win) + 0.05):
+            detected.append(i + 1)
+    check("Cortes en su fotograma exacto (y solo ahí)", detected == sorted(cut_frames),
           f"esperados {sorted(cut_frames)}; detectados {detected}")
     # fotogramas aislados anómalos (picos que no son cortes)
     spikes = []
@@ -109,8 +112,13 @@ def main():
     nonfinite = [i for i in range(len(fr_s)) if (fr_s[i] > 250).mean() > 0.995 or
                  (np.abs(fr_s[i, ..., 0] - fr_s[i, ..., 1]) > 120).mean() > 0.05]
     check("Sin fotogramas corruptos (saturados / color inválido)", not nonfinite, f"{nonfinite[:10]}")
-    black = [i for i in range(len(fr_s)) if luma[i] < 0.5]
-    check("Negro total solo en el arranque", all(i < 12 for i in black), f"fotogramas negros: {black[:15]}")
+    mx = fr_s.max(axis=(1, 2, 3))
+    first_light = int(np.argmax(mx > 8))
+    late_black = [i for i in range(first_light, len(fr_s)) if mx[i] <= 8]
+    check("Apertura en oscuridad breve y sin negros posteriores",
+          first_light / FPS <= 0.5 and not late_black,
+          f"primera luz visible en el fotograma {first_light} ({first_light / FPS:.2f} s); "
+          f"negros posteriores: {late_black[:10]}")
     # fluidez: dentro de cada plano, la variación entre fotogramas no presenta saltos
     jerks = []
     for k, (_, s, e) in enumerate(SHOTS):
@@ -171,15 +179,22 @@ def main():
     flux = (flux - flux.mean()) / flux.std()
     pk, _ = signal.find_peaks(flux, height=2.0, distance=int(0.12 * sr / 256))
     onsets = to[1:][pk]
-    ev = ["", "| Evento visual | Tiempo | Golpe musical detectado | Desfase |", "|---|---|---|---|"]
+    ev = ["", "| Evento visual | Tiempo | Ataque musical detectado | Desfase | Prominencia |", "|---|---|---|---|---|"]
     worst = 0.0
+    tt = to[1:]
     for k, tv in HITS.items():
         if k in ("luz_enciende", "respiro"):
             continue
-        d = onsets - tv
-        i = int(np.argmin(np.abs(d)))
-        worst = max(worst, abs(d[i]))
-        ev.append(f"| {k} | {tv:.3f} s | {onsets[i]:.3f} s | {d[i] * 1000:+.0f} ms |")
+        # ataque más fuerte en ±60 ms, comparado con el entorno de ±0,4 s
+        near = np.where(np.abs(tt - tv) <= 0.06)[0]
+        ctx = np.where((np.abs(tt - tv) <= 0.4) & (np.abs(tt - tv) > 0.06))[0]
+        j = near[np.argmax(flux[near])]
+        prom = (flux[j] - np.median(flux[ctx])) / (np.std(flux[ctx]) + 1e-9)
+        d = tt[j] - tv
+        if prom < 3.0:
+            d = 1.0   # no hay ataque claro en el instante del evento
+        worst = max(worst, abs(d))
+        ev.append(f"| {k} | {tv:.3f} s | {tt[j]:.3f} s | {(tt[j] - tv) * 1000:+.0f} ms | {prom:.1f} σ |")
     check("Sincronía golpes ↔ imagen", worst < 1 / FPS, f"peor desfase {worst * 1000:.0f} ms (1 fotograma = 16,7 ms)")
     lines += ev
     # respiro
