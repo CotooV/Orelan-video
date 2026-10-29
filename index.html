@@ -34,6 +34,8 @@ ul,ol{list-style:none}
 #count{font:600 13px Archivo,sans-serif;letter-spacing:.08em;color:#B8B3AB;background:rgba(15,14,14,.75);padding:9px 12px;border-radius:999px;min-width:64px;text-align:center}
 #bar{position:fixed;left:0;top:0;height:3px;background:#B3121B;z-index:6;transition:width .4s ease}
 .sp{flex:1}
+#tapPlay{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:7;display:none;border:0;background:#B3121B;color:#fff;font:600 13px Archivo,sans-serif;letter-spacing:.06em;padding:10px 16px;border-radius:999px;cursor:pointer}
+#tapPlay.show{display:block}
 #hint{position:fixed;inset:0;z-index:10;background:rgba(15,14,14,.94);display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:32px}
 #hint svg{width:64px;height:64px;fill:none;stroke:#E2343E;stroke-width:1.6;animation:rot 2.2s ease-in-out infinite}
 @keyframes rot{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
@@ -300,7 +302,7 @@ ul,ol{list-style:none}
 </div>
 <div style="display:flex;flex-direction:column;gap:18px;width:520px">
 <p style="font-size:24px;letter-spacing:4px;color:#E2343E;font-weight:600">LOGO ANIMADO</p>
-<video poster="media/skoll-logo-animado.jpg" data-src="media/skoll-logo-animado.mp4" muted loop playsinline preload="none" style="width:520px;height:290px;object-fit:cover;border-radius:16px"></video>
+<video poster="media/skoll-logo-animado.jpg" data-src="media/skoll-logo-animado.mp4" muted loop playsinline webkit-playsinline preload="none" style="width:520px;height:290px;object-fit:cover;border-radius:16px"></video>
 <p style="font-size:24px;line-height:1.4;color:#B8B3AB">Intro para reels, la web y las pantallas del local.</p>
 </div>
 </div>
@@ -322,7 +324,7 @@ ul,ol{list-style:none}
 <div style="position:absolute;left:24px;top:16px;width:14px;height:14px;background:#4D4944;border-radius:50%"></div>
 <div style="position:absolute;left:48px;top:16px;width:14px;height:14px;background:#4D4944;border-radius:50%"></div>
 <div style="position:absolute;left:72px;top:16px;width:14px;height:14px;background:#4D4944;border-radius:50%"></div>
-<video poster="media/web-completa.jpg" data-src="media/web-completa.mp4" muted loop playsinline preload="none" style="position:absolute;left:0;top:44px;width:1000px;height:581px;object-fit:cover"></video>
+<video poster="media/web-completa.jpg" data-src="media/web-completa.mp4" muted loop playsinline webkit-playsinline preload="none" style="position:absolute;left:0;top:44px;width:1000px;height:581px;object-fit:cover"></video>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:24px">
 <div><h3 style="font-size:30px;font-weight:600">Intro con su logo</h3><p style="font-size:24px;line-height:1.4;color:#B8B3AB">El logo se arma al abrir la página.</p></div>
@@ -354,7 +356,7 @@ ul,ol{list-style:none}
 <li>Con su estética: negro, dorado y su logo</li>
 </ul>
 </div>
-<video poster="media/demo-reserva.jpg" data-src="media/demo-reserva.mp4" muted loop playsinline preload="none" style="width:1040px;height:650px;object-fit:contain;border-radius:16px;border:1px solid #2A2828;box-shadow:0px 30px 80px rgba(0,0,0,0.55)"></video>
+<video poster="media/demo-reserva.jpg" data-src="media/demo-reserva.mp4" muted loop playsinline webkit-playsinline preload="none" style="width:1040px;height:650px;object-fit:contain;border-radius:16px;border:1px solid #2A2828;box-shadow:0px 30px 80px rgba(0,0,0,0.55)"></video>
 <div style="position:absolute;left:128px;bottom:64px;width:1460px;display:flex;justify-content:space-between">
 <p style="font-size:24px;color:#8A857E">Demo funcional hecho por Strats999 para esta reunión · precios de ejemplo</p>
 <p style="font-size:24px;color:#8A857E">11</p>
@@ -388,7 +390,7 @@ ul,ol{list-style:none}
 </div>
 </div>
 </div>
-<video poster="media/whatsapp-ia.jpg" data-src="media/whatsapp-ia.mp4" muted loop playsinline preload="none" style="width:440px;height:782px;object-fit:cover;border-radius:40px;border:8px solid #2A2828"></video>
+<video poster="media/whatsapp-ia.jpg" data-src="media/whatsapp-ia.mp4" muted loop playsinline webkit-playsinline preload="none" style="width:440px;height:782px;object-fit:cover;border-radius:40px;border:8px solid #2A2828"></video>
 <div style="position:absolute;left:128px;bottom:64px;width:1460px;display:flex;justify-content:space-between">
 <p style="font-size:24px;color:#8A857E">Simulación de una conversación real con el asistente · el tono se ajusta con ustedes</p>
 <p style="font-size:24px;color:#8A857E">12</p>
@@ -504,6 +506,7 @@ ul,ol{list-style:none}
   <span class="sp"></span>
   <button class="cbtn" id="fs" aria-label="Pantalla completa"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
 </div>
+<button type="button" id="tapPlay">▶ Tocá para ver los videos</button>
 <div id="hint">
   <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
   <b>Girá el teléfono</b>
@@ -518,8 +521,14 @@ addEventListener('resize',fit);fit();
 const BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 function anims(sec,on){sec.querySelectorAll('img[data-anim]').forEach(i=>{clearTimeout(i._t);if(on)i.src=i.dataset.anim;else i._t=setTimeout(()=>{if(!sec.classList.contains('on'))i.src=BLANK},650)})}
 document.querySelectorAll('img[data-anim]').forEach(i=>i.src=BLANK);
-function vids(sec,play){anims(sec,play);sec.querySelectorAll('video').forEach(v=>{if(play){if(!v.src)v.src=v.dataset.src;v.currentTime=0;const p=v.play();if(p)p.catch(()=>{})}else{v.pause()}})}
-function preload(i){const s=slides[i];if(s)s.querySelectorAll('video').forEach(v=>{if(!v.src){v.src=v.dataset.src;v.preload='auto'}})}
+function prep(v){v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('webkit-playsinline','');v.setAttribute('muted','');if(!v.src){v.src=v.dataset.src;v.load()}}
+function tryPlay(v){prep(v);const p=v.play();if(p&&p.catch)p.then(()=>tap(false)).catch(()=>tap(true))}
+function tap(show){document.getElementById('tapPlay').classList.toggle('show',show)}
+function vids(sec,play){anims(sec,play);sec.querySelectorAll('video').forEach(v=>{if(play){prep(v);try{v.currentTime=0}catch(e){}tryPlay(v);v.oncanplay=()=>{if(sec.classList.contains('on')&&v.paused)tryPlay(v)};setTimeout(()=>{if(sec.classList.contains('on')&&v.paused)tryPlay(v)},700)}else{v.pause();tap(false)}})}
+function kick(){const s=slides[cur];if(s)s.querySelectorAll('video').forEach(v=>{if(v.paused)tryPlay(v)})}
+['touchend','click'].forEach(ev=>addEventListener(ev,kick,{passive:true}));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)kick()});
+function preload(i){const s=slides[i];if(s)s.querySelectorAll('video').forEach(v=>{v.preload='auto';prep(v)})}
 function go(i,push=true){
   i=Math.max(0,Math.min(slides.length-1,i));
   slides.forEach((s,k)=>{const on=k===i;if(s.classList.contains('on')&&!on)vids(s,false);s.classList.toggle('on',on)});
